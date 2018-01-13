@@ -1,0 +1,40 @@
+﻿
+
+<script>
+    $(document).ready(function () {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCubeTimesAll", "Home")',
+            dataType: "Json",
+            success: createTimeTable
+        });
+    });
+
+    function deleteCubeTime(toDeleteId) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteCubeTime", "Home")',
+            data: { id: toDeleteId },
+            success: updateTable
+        });
+    }
+
+</script>
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4" style="text-align: center;">
+        <h2 id="timeconfig">Time Config</h2>
+    </div>
+    <div class="col-lg-4"></div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+        <table id="timeTable"></table>
+    </div>
+    <div class="col-lg-4"></div>
+</div>
+

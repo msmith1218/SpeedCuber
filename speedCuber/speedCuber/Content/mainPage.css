@@ -1,0 +1,267 @@
+﻿#resetDefaultContainer {
+    margin-top: 25px;
+}
+
+
+
+#cubeTypeDup {
+    margin-top: 7px;
+}
+
+#deleteTypeContainer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#inspection {
+    padding-top: 2px;
+    
+}
+
+#btnRow {
+    margin-top: 15px;
+}
+
+#timeTable {
+    margin-right: auto;
+    margin-left: auto;
+
+}
+#timeconfig {
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+}
+
+#newName {
+    margin-top: 5px;
+    width: 175px;
+}
+#newNameBtn {
+    width: 140px;
+}
+
+#modalToggleBtn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+#tableData {
+    border-radius: 10px;
+    text-align: center;
+}
+#statsTable {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+    border: 1px solid black;
+}
+
+td {
+    border: 1px solid black;
+}
+
+#timerWell {
+    border-radius: 10px;
+}
+
+@media(max-width: 430px) {
+    #recentTable {
+        margin-right: auto;
+        margin-left: auto;
+    }
+    #recentTableHolder {
+        text-align: center;
+        margin-bottom: 15px;
+        width: 125px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    #pic {
+        margin-left: 16px;
+    }
+    #info {
+        width: 292px;
+        height: 220px;
+    }
+    #timerWell {
+        background-color: rgba(245, 245, 245, 0.4);
+    }
+
+    #popup {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #info1 {
+        margin-left: 5px;
+    }
+    #info2 {
+        margin-left: 5px;
+    }
+
+    #alignTimerDisplay {
+        background-color: #f5f5f5;
+        border-color: grey;
+    }
+
+
+    #cubeTypeLabel {
+        width: 85px;
+        margin-left: 0px;
+    }
+
+    #cubeType {
+        margin-right: 10px;
+    }
+}
+
+@media(min-width: 430px) {
+    #recentTable {
+        margin-right: auto;
+    }
+    #recentTableHolder {
+        text-align: center;
+        
+        width: 125px;
+
+    }
+
+    #pic {
+        margin-left: 28px;
+    }
+
+
+    #cubeTypeLabel {
+        width: 85px;
+        margin-left: 15px;
+    }
+
+    #cubeType {
+        margin-right: 10px;
+    }
+    #cbocks {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+    }
+}
+
+
+.timerDisplay {
+    display: inline-block;
+}
+
+#parentDisplay {
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    height: 85px;
+}
+
+#timeDisplayRow {
+    text-align: center;
+}
+
+#alignTimerDisplay {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    border-color: darkgrey;
+    height: 75px;
+    margin-top: 10px;
+}
+
+#displayer {
+    font-size: 30px;
+    font-style: oblique;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#startBtn {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#resetTimeBtn {
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#timerDiv {
+    font-size: 50px;
+    width: 10px;
+}
+
+#tenths {
+    font-size: 50px;
+    width: 20px;
+    margin-right: 3px;
+}
+
+#milli {
+    font-size: 50px;
+    width: 20px;
+}
+
+#minDiv {
+    font-size: 50px;
+    width: 30px;
+}
+
+#period {
+    font-size: 50px;
+    width: 1px;
+    padding-right: 0;
+    margin-right: 7px;
+    margin-left: 11px;
+}
+
+#seconds {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-left: 3px;
+    margin-right: 30px;
+}
+
+#minute {
+    font-size: 30px;
+    margin-top: 20px;
+}
+
+#scrambleBtn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#topTimerBtns {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 220px;
+    text-align: center;
+}
+
+#pic {
+    width: 300px;
+    height: 300px;
+    opacity: 0.2;
+    z-index: -1;
+    position: absolute;
+    margin-top:30px;
+}

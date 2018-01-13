@@ -1,0 +1,319 @@
+﻿@using speedCuber.Controllers
+@using speedCuber.Models
+@{
+    ViewBag.Title = "Home Page";
+    
+}
+
+<script>
+
+    function getUpdatedScramble() {
+        $.ajax({
+            url: '@Url.Action("GetScramble", "Home")',
+            contentType: "string",
+            success: displayScramble
+
+        });
+    }
+
+    function saveTime() {
+        var theType = cubeTypeSelectedAtStart;
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveScrambleTime", "Home")',
+            data: { scrambleTime: timeCurrent, scrambleType : theType},
+            success: getCubeTimes
+        });
+    }
+
+    function saveType(cubeType) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("SaveCubeType", "Home")',
+            data: { type: cubeType },
+            success: getCubeTypes
+        });
+    }
+
+    function getCubeTimes() {
+        var selected = $("#cubeType").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCubeTimes", "Home")',
+            dataType: "Json",
+            data : {theType : selected},
+            success: makeCubeStatTable
+        });
+    }
+
+    function getCubeTypes() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCubeTypes", "Home")',
+            contentType: "application/json",
+            dataType: "Json",
+            success: passOverCubeTypes
+        });
+    }
+
+    function makeDupTypeDD() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCubeTypes", "Home")',
+            contentType: "application/json",
+            dataType: "Json",
+            success: makeDuplicateCubeTypeDD
+        });
+    }
+
+    function deleteCubeType(toDelete) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteCubeType", "Home")',
+            data: { type: toDelete },
+            success: getCubeTypes
+        });
+    }
+
+    function deleteAllTimesWithAssocType(deleteType) {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteAllTimesWithAssocType", "Home")',
+            data: { theType: deleteType }
+        });
+    }
+
+    function addTypeOption() {
+        var newName = document.getElementById("newName").value;
+        if (newName.length > 0) {
+            // need more validation for newName
+
+            if (!isInList(newName)) {
+                saveType(newName);
+            }
+            // else display message saying its already in the list
+
+        }
+    }
+
+    function grabToDeleteFromDD() {
+        var selected = $("#cubeTypeDup").val();
+        if (selected.length > 0) {
+            if (selected != "1101100011011101") {
+                var sure = confirm("Delete " + selected + "?");
+                if (sure) {
+                    removeTypeOption(selected);
+                    deleteAllTimesWithAssocType(selected);
+                    deleteCubeType(selected);
+                }
+            }
+        }
+    }
+
+    function resetDefault() {
+        var sure = confirm("Are you sure you want to reset 3x3?");
+        if (sure) {
+            deleteAllTimesWithAssocType("1101100011011101");
+        }
+        
+    }
+
+    function passOverCubeTypes(results) {
+        appendLoadedCubeTypes(results);
+        makeDuplicateCubeTypeDD(results);
+    }
+
+
+    function makeCubeStatTable(results) {
+        buildStatTable(results);
+    }
+
+
+
+
+
+
+    $(document).ready(function () {
+        getUpdatedScramble();
+        $(document).keyup(function(event) {
+            if (event.which == 32) {
+                event.preventDefault();
+                if (!timerGoing && popupOpen) {
+                    removeSavePopUp();
+                    saveTime();
+                    resetTime();
+                } else {
+                    timeDecision();
+                }
+                
+            }
+        });
+    });
+
+</script>
+
+<div class="row" id="btnRow">
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+        <button id="scrambleBtn" class="btn btn-primary" onclick="getUpdatedScramble()">Get Scramble</button>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div id="alignDiv">
+            <img id="pic" src="~/Content/Images/cube.png" alt="cube" onload="getCubeTimes(), getCubeTypes()">
+        </div>
+    </div>
+    <div class="col-md-4"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-2">
+
+    </div>
+    <div id="parentDisplay" class="col-md-8">
+        <div id="displayer"></div>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 well" id="timerWell">
+        <div id="topTimerBtns">
+            <button class="btn btn-success" onclick="timeDecision()" id="startBtn" data-toggle="tooltip" title="press SPACE to start">Start Timer</button>
+        </div>
+        <div id="timeDisplayRow">
+            <div id="alignTimerDisplay">
+                <div id="minDiv" class="timerDisplay">
+
+                </div>
+                <div id="minute" class="timerDisplay"></div>
+                <div id="timerDiv" class="timerDisplay">
+                    0
+                </div>
+                <div id="period" class="timerDisplay">
+                    .
+                </div>
+                <div class="timerDisplay" id="tenths">
+                    0
+                </div>
+                <div class="timerDisplay" id="milli">
+                    0
+                </div>
+                <div id="seconds" class="timerDisplay">s</div>
+
+            </div>
+        </div>
+        
+    </div>
+    <div class="col-md-4" id="popupDiv">
+
+    </div>
+    <div class="col-md-4 well" id="tableData">
+        <table id='statsTable'>
+            <tr><td style='width: 125px'>Worst Time</td><td style='width: 125px'>*</td></tr>
+            <tr><td style='width: 125px'>Best Time</td><td style='width: 125px'>*</td></tr>
+            <tr><td style='width: 125px'>Avg</td><td style='width: 125px'>*</td></tr>
+            <tr><td style='width: 125px'>3 of 5</td><td style='width: 125px'>*</td></tr>
+            <tr><td style='width: 125px'>10 of 12</td><td style='width: 125px'>*</td></tr>
+
+        </table>
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-md-1">
+        <div id="recentTableHolder">
+            <table class="table-striped" id="recentTable">
+                <thead><tr><td>Recent Times</td></tr></thead>
+                <tbody>
+                <tr><td style="width: 75px;">*</td></tr>
+                <tr><td style="width: 75px;">*</td></tr>
+                <tr><td style="width: 75px;">*</td></tr>
+                <tr><td style="width: 75px;">*</td></tr>
+                <tr><td style="width: 75px;">*</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="checkbox" style="width: 125px; margin-top: 0;" id="cbocks">
+            <label class="label label-primary"><input type="checkbox" value="" id="inspection">Inspection Time</label>
+        </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <div id="typeHolder">
+            <label id="cubeTypeLabel">Category : </label>
+            <select id="cubeType" style="width: 150px;">
+                <option value="1101100011011101">3x3</option>
+            </select>
+            <button class="btn btn-success" id="addBtn" style="width: 65px; height: 35px;" onclick="getCubeTimes()">Switch</button>
+        </div>
+        <div class="row">
+            <button data-toggle="modal" data-target="#changeTypeModal" id="modalToggleBtn" onclick="makeDupTypeDD()">Categories</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="changeTypeModal" class="modal fade">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" onload="makeDupTypeDD()">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Group / Delete Group / Reset Default</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container col-md-12">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form onsubmit="addTypeOption(), makeDupTypeDD()">
+                                <button id="newNameBtn" class="btn btn-primary" type="submit">Add new Type</button>
+                                <input id="newName" class="form-control" type="text" placeholder="type new name"/>
+                            </form>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row" id="deleteRow">
+                        <div class="col-md-4">
+                            <button id="deleteCubeTypeBtn" class="btn btn-danger" onclick="grabToDeleteFromDD()">Delete Cube Type</button>
+                            <select id="cubeTypeDup" style="width: 175px;"></select>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <div id="resetDefaultContainer">
+                                    <label class="label label-primary">Reset Standard 3x3 Group</label>
+                                    <button class="btn btn-success" onclick="resetDefault()">
+                                        <span class="glyphicon glyphicon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="getCubeTimes()">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
